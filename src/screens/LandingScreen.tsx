@@ -17,7 +17,7 @@ export default function LandingScreen() {
 
         {/* Eyebrow */}
         <p className="text-center text-xs font-bold tracking-[0.35em] uppercase mb-2" style={{ color: '#C9A000' }}>
-          ★ Who Won The Year ★
+          ★ The 2026 Bracket ★
         </p>
 
         {/* Main title */}
@@ -25,7 +25,7 @@ export default function LandingScreen() {
           className="font-serif font-black text-center leading-[0.95] tracking-tight mb-4"
           style={{ fontSize: 'clamp(48px, 10vw, 76px)' }}
         >
-          The <span style={{ color: '#F5C518' }}>2025</span><br />Bracket
+          Who <span style={{ color: '#F5C518' }}>Won</span><br />The Year
         </h1>
 
         {/* Subline */}
