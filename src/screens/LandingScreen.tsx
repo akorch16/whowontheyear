@@ -5,45 +5,81 @@ export default function LandingScreen() {
   const { goToSetup } = useGame()
 
   return (
-    <div className="relative min-h-[calc(100vh-57px)] flex flex-col items-center justify-center px-6 py-16 overflow-hidden">
+    <div className="relative min-h-[calc(100vh-57px)] flex flex-col items-center justify-center px-6 py-16 overflow-hidden bg-white">
       <Confetti />
 
-      <div className="relative z-10 text-center max-w-2xl mx-auto space-y-8">
+      <div className="relative z-10 w-full max-w-2xl mx-auto">
+
         {/* Trophy */}
-        <div className="text-7xl select-none">🏆</div>
+        <div className="text-center mb-5">
+          <span className="text-6xl select-none">🏆</span>
+        </div>
 
         {/* Eyebrow */}
-        <p className="text-xs font-bold tracking-[0.3em] uppercase text-gold-dark">
-          ★ Annual Bracket ★
+        <p className="text-center text-xs font-bold tracking-[0.35em] uppercase mb-4" style={{ color: '#C9A000' }}>
+          ★ Who Won The Year ★
         </p>
 
-        {/* Title */}
-        <h1 className="font-serif font-black leading-none tracking-tight" style={{ fontSize: 'clamp(52px, 11vw, 96px)' }}>
-          Who Won<br />
-          <span className="text-gold">The Year?</span>
+        {/* Main title */}
+        <h1
+          className="font-serif font-black text-center leading-[0.95] tracking-tight mb-6"
+          style={{ fontSize: 'clamp(60px, 13vw, 108px)' }}
+        >
+          The <span style={{ color: '#F5C518' }}>2025</span><br />Bracket
         </h1>
 
         {/* Subline */}
-        <p className="text-lg text-gray-500 font-semibold max-w-md mx-auto leading-relaxed">
-          64 contenders. One champion. No criteria.
-          The year's most chaotic bracket starts here.
+        <p className="text-center text-base text-gray-400 font-semibold mb-10 max-w-sm mx-auto leading-relaxed">
+          64 contenders. Organized chaos. One champion.<br />No criteria. Just vibes.
         </p>
 
-        {/* CTA */}
-        <button
-          onClick={goToSetup}
-          className="btn-gradient inline-flex items-center gap-3 px-10 py-4 rounded-xl text-lg font-black tracking-wide shadow-lg"
-        >
-          Get Started →
-        </button>
-
-        {/* Rules teaser */}
-        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-gray-400 font-semibold pt-2">
-          <span>🎯 Play-in round</span>
-          <span>🔄 Rotating pickers</span>
-          <span>🗳️ Group vote + veto</span>
+        {/* CTA button */}
+        <div className="flex justify-center mb-10">
+          <button
+            onClick={goToSetup}
+            className="btn-gradient px-12 py-4 rounded-xl text-lg font-black tracking-wide shadow-xl"
+          >
+            Get Started →
+          </button>
         </div>
+
+        {/* Divider */}
+        <div className="flex items-center gap-4 mb-8">
+          <div className="flex-1 h-px bg-gray-100" />
+          <span className="text-xs font-bold tracking-widest uppercase text-gray-300">how it works</span>
+          <div className="flex-1 h-px bg-gray-100" />
+        </div>
+
+        {/* Rules cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <RuleCard
+            icon="🎯"
+            title="Play-In Round"
+            desc="Topical matchups fight for the last spots in the field of 64."
+          />
+          <RuleCard
+            icon="🔄"
+            title="Rotating Pickers"
+            desc="R64 & R32: each player takes turns picking the winner. No vote."
+          />
+          <RuleCard
+            icon="⚔️"
+            title="Vote + Veto"
+            desc="Sweet 16 onward: group vote. Each player gets one veto all game."
+          />
+        </div>
+
       </div>
+    </div>
+  )
+}
+
+function RuleCard({ icon, title, desc }: { icon: string; title: string; desc: string }) {
+  return (
+    <div className="rounded-xl border border-gray-100 bg-white px-4 py-4 text-center shadow-sm">
+      <div className="text-2xl mb-2">{icon}</div>
+      <div className="font-bold text-gray-800 text-sm mb-1">{title}</div>
+      <div className="text-xs text-gray-400 leading-relaxed">{desc}</div>
     </div>
   )
 }
