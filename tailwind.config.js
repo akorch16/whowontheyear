@@ -3,12 +3,17 @@ export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      },
       colors: {
-        ink: '#0d0f14',
-        panel: '#161a23',
-        edge: '#262d3a',
-        accent: '#e8b923',
-        accent2: '#d23f3f',
+        gold: '#F5C518',
+        'gold-dark': '#C9A000',
+        pink: '#FF3CAC',
+        purple: '#784BA0',
+        blue: '#2BD9FE',
+        edge: '#e5e7eb',
       },
     },
   },

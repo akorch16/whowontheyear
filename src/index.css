@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html,
@@ -14,8 +14,41 @@ body,
 
 body {
   margin: 0;
-  background: theme('colors.ink');
-  color: #e8eaf0;
-  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: #ffffff;
+  color: #111111;
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Gradient button used for pick/win actions */
+.btn-gradient {
+  background: linear-gradient(135deg, #FF3CAC 0%, #784BA0 50%, #2BD9FE 100%);
+  color: #ffffff;
+  border: none;
+  transition: opacity 0.15s, transform 0.12s;
+}
+.btn-gradient:hover:not(:disabled) {
+  opacity: 0.88;
+  transform: translateY(-2px);
+}
+.btn-gradient:disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
+  opacity: 1;
+}
+
+/* Gold accent button */
+.btn-gold {
+  background: #F5C518;
+  color: #111111;
+  border: none;
+  transition: background 0.15s, transform 0.12s;
+}
+.btn-gold:hover:not(:disabled) {
+  background: #C9A000;
+  transform: translateY(-1px);
+}
+.btn-gold:disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
 }

@@ -15,42 +15,39 @@ export default function PlayScreen() {
   const active = roundMatchups.find((m) => m.winner === null)
   const done = roundMatchups.filter((m) => m.winner !== null).length
   const meta = ROUND_META[state.currentRound]
+  const pct = roundMatchups.length ? (done / roundMatchups.length) * 100 : 0
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-5 space-y-5">
-      <div className="flex items-center justify-between gap-3">
+    <div className="max-w-2xl mx-auto px-5 py-7 space-y-5">
+      {/* Round header */}
+      <div className="flex items-start justify-between gap-3">
         <div>
-          <div className="font-black text-xl">{meta.label}</div>
-          <div className="text-xs text-white/40">
-            {done}/{roundMatchups.length} matchups decided ·{' '}
-            {meta.voting ? 'group vote' : 'pickers rotate'}
-          </div>
+          <h2 className="font-serif font-black text-2xl tracking-tight">{meta.label}</h2>
+          <p className="text-xs text-gray-400 font-semibold mt-0.5">
+            {done}/{roundMatchups.length} matchups · {meta.voting ? 'group vote' : 'rotating pickers'}
+          </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 shrink-0">
           <button
             onClick={() => setShowBracket((v) => !v)}
-            className="rounded-md border border-edge px-3 py-1.5 text-sm hover:border-accent"
+            className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-semibold hover:border-gold transition-colors"
           >
             {showBracket ? 'Hide' : 'Bracket'}
           </button>
           <button
-            onClick={() => {
-              if (confirm('Start a new game? This clears the current bracket.'))
-                reset()
-            }}
-            className="rounded-md border border-edge px-3 py-1.5 text-sm hover:border-accent2"
+            onClick={() => { if (confirm('Start a new game? This clears the current bracket.')) reset() }}
+            className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-semibold hover:border-rose-300 transition-colors text-gray-500"
           >
             New
           </button>
         </div>
       </div>
 
-      <div className="h-1.5 rounded-full bg-edge overflow-hidden">
+      {/* Progress */}
+      <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
         <div
-          className="h-full bg-accent transition-all"
-          style={{
-            width: `${roundMatchups.length ? (done / roundMatchups.length) * 100 : 0}%`,
-          }}
+          className="h-full rounded-full transition-all"
+          style={{ width: `${pct}%`, background: 'linear-gradient(90deg, #F5C518, #C9A000)' }}
         />
       </div>
 
@@ -59,14 +56,14 @@ export default function PlayScreen() {
       {active ? (
         <MatchupControl matchup={active} />
       ) : (
-        <div className="text-center text-white/50 py-10">
+        <div className="text-center text-gray-400 py-12 font-semibold">
           Round complete — advancing…
         </div>
       )}
 
-      {/* Up next preview */}
+      {/* Up next */}
       {active && roundMatchups.filter((m) => m.winner === null).length > 1 && (
-        <div className="text-xs text-white/40">
+        <p className="text-xs text-gray-300 font-semibold">
           Up next:{' '}
           {roundMatchups
             .filter((m) => m.winner === null && m.id !== active.id)
@@ -77,7 +74,7 @@ export default function PlayScreen() {
               return `${a} vs ${b}`
             })
             .join('  ·  ')}
-        </div>
+        </p>
       )}
     </div>
   )
