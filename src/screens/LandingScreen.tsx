@@ -5,36 +5,36 @@ export default function LandingScreen() {
   const { goToSetup } = useGame()
 
   return (
-    <div className="relative min-h-[calc(100vh-57px)] flex flex-col items-center justify-center px-6 py-16 overflow-hidden bg-white">
+    <div className="relative min-h-[calc(100vh-57px)] flex flex-col items-center justify-center px-6 py-4 overflow-hidden bg-white">
       <Confetti />
 
       <div className="relative z-10 w-full max-w-2xl mx-auto">
 
         {/* Trophy */}
-        <div className="text-center mb-5">
-          <span className="text-6xl select-none">🏆</span>
+        <div className="text-center mb-3">
+          <span className="text-5xl select-none">🏆</span>
         </div>
 
         {/* Eyebrow */}
-        <p className="text-center text-xs font-bold tracking-[0.35em] uppercase mb-4" style={{ color: '#C9A000' }}>
+        <p className="text-center text-xs font-bold tracking-[0.35em] uppercase mb-2" style={{ color: '#C9A000' }}>
           ★ Who Won The Year ★
         </p>
 
         {/* Main title */}
         <h1
-          className="font-serif font-black text-center leading-[0.95] tracking-tight mb-6"
-          style={{ fontSize: 'clamp(60px, 13vw, 108px)' }}
+          className="font-serif font-black text-center leading-[0.95] tracking-tight mb-4"
+          style={{ fontSize: 'clamp(48px, 10vw, 76px)' }}
         >
           The <span style={{ color: '#F5C518' }}>2025</span><br />Bracket
         </h1>
 
         {/* Subline */}
-        <p className="text-center text-base text-gray-400 font-semibold mb-10 max-w-sm mx-auto leading-relaxed">
+        <p className="text-center text-base text-gray-400 font-semibold mb-6 max-w-sm mx-auto leading-relaxed">
           64 contenders. Organized chaos. One champion.<br />No criteria. Just vibes.
         </p>
 
         {/* CTA button */}
-        <div className="flex justify-center mb-10">
+        <div className="flex justify-center mb-8">
           <button
             onClick={goToSetup}
             className="btn-gradient px-12 py-4 rounded-xl text-lg font-black tracking-wide shadow-xl"
