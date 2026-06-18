@@ -55,45 +55,48 @@ export default function MatchupControl({ matchup }: { matchup: Matchup }) {
         />
       </div>
 
-      {/* Voting-round controls */}
-      {meta.voting && (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-600 font-semibold">{totalVotes} vote{totalVotes !== 1 ? 's' : ''} cast</span>
-            <button
-              onClick={() => setVetoOpen((v) => !v)}
-              className="font-bold text-rose-500 hover:underline"
-            >
-              {vetoOpen ? 'Hide veto' : '⚔️ Veto / argue'}
-            </button>
-          </div>
+      {/* Veto — available every round */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between text-sm">
+          {meta.voting
+            ? <span className="text-gray-600 font-semibold">{totalVotes} vote{totalVotes !== 1 ? 's' : ''} cast</span>
+            : <span />
+          }
+          <button
+            onClick={() => setVetoOpen((v) => !v)}
+            className="font-bold text-rose-500 hover:underline"
+          >
+            {vetoOpen ? 'Hide veto' : '⚔️ Veto / argue'}
+          </button>
+        </div>
 
-          {vetoOpen && (
-            <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 space-y-3">
-              <p className="text-sm text-gray-700">
-                2 min to argue · 2 min to counter · then vote. One veto per player, whole game.
-              </p>
-              <Timer seconds={120} />
-              <div className="flex flex-wrap gap-2 pt-1">
-                {state.players.map((p) => (
-                  <button
-                    key={p.id}
-                    disabled={p.vetoUsed}
-                    onClick={() => !p.vetoUsed && setVetoSplash({ playerId: p.id, playerName: p.name })}
-                    className={`rounded-lg px-3 py-1 text-sm font-bold border transition-colors ${
-                      p.vetoUsed
-                        ? 'border-gray-200 text-gray-500 line-through bg-white'
-                        : 'border-rose-300 text-rose-600 hover:bg-rose-100 bg-white'
-                    }`}
-                  >
-                    {p.name}{p.vetoUsed ? ' · used' : ' · veto'}
-                  </button>
-                ))}
-              </div>
+        {vetoOpen && (
+          <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 space-y-3">
+            <p className="text-sm text-gray-700">
+              2 min to argue · 2 min to counter · then vote. One veto per player, whole game.
+            </p>
+            <Timer seconds={120} />
+            <div className="flex flex-wrap gap-2 pt-1">
+              {state.players.map((p) => (
+                <button
+                  key={p.id}
+                  disabled={p.vetoUsed}
+                  onClick={() => !p.vetoUsed && setVetoSplash({ playerId: p.id, playerName: p.name })}
+                  className={`rounded-lg px-3 py-1 text-sm font-bold border transition-colors ${
+                    p.vetoUsed
+                      ? 'border-gray-200 text-gray-500 line-through bg-white'
+                      : 'border-rose-300 text-rose-600 hover:bg-rose-100 bg-white'
+                  }`}
+                >
+                  {p.name}{p.vetoUsed ? ' · used' : ' · veto'}
+                </button>
+              ))}
             </div>
-          )}
+          </div>
+        )}
 
-          {/* Win buttons */}
+        {/* Win buttons — voting rounds only */}
+        {meta.voting && (
           <div className="grid grid-cols-2 gap-3">
             <button
               disabled={!a}
@@ -110,8 +113,8 @@ export default function MatchupControl({ matchup }: { matchup: Matchup }) {
               {b?.label ?? 'bye'} wins ✓
             </button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {vetoSplash && (
         <VetoSplash
