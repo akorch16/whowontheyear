@@ -3,10 +3,12 @@ import type { Matchup } from '../types'
 import { useGame } from '../store/gameStore'
 import { ROUND_META } from '../game/rounds'
 import Timer from '../components/Timer'
+import VetoSplash from '../components/VetoSplash'
 
 export default function MatchupControl({ matchup }: { matchup: Matchup }) {
   const { state, pickWinner, vote, useVeto } = useGame()
   const [vetoOpen, setVetoOpen] = useState(false)
+  const [vetoSplash, setVetoSplash] = useState<{ playerId: string; playerName: string } | null>(null)
   const meta = ROUND_META[matchup.round]
   const entry = (id: string | null) => (id ? state.entries[id] : null)
   const a = entry(matchup.a)
@@ -77,7 +79,7 @@ export default function MatchupControl({ matchup }: { matchup: Matchup }) {
                   <button
                     key={p.id}
                     disabled={p.vetoUsed}
-                    onClick={() => useVeto(p.id)}
+                    onClick={() => !p.vetoUsed && setVetoSplash({ playerId: p.id, playerName: p.name })}
                     className={`rounded-lg px-3 py-1 text-sm font-bold border transition-colors ${
                       p.vetoUsed
                         ? 'border-gray-200 text-gray-500 line-through bg-white'
@@ -109,6 +111,13 @@ export default function MatchupControl({ matchup }: { matchup: Matchup }) {
             </button>
           </div>
         </div>
+      )}
+
+      {vetoSplash && (
+        <VetoSplash
+          playerName={vetoSplash.playerName}
+          onDone={() => { useVeto(vetoSplash.playerId); setVetoSplash(null) }}
+        />
       )}
     </div>
   )
