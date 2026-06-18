@@ -14,8 +14,8 @@ export default function ChampionScreen() {
           style={{ fontSize: 'clamp(40px, 10vw, 68px)' }}>
         {champ?.label ?? 'Champion'}
       </h2>
-      {champ?.note && <p className="text-gray-400 font-semibold">{champ.note}</p>}
-      <p className="text-gray-400 font-semibold text-base max-w-sm mx-auto">
+      {champ?.note && <p className="text-gray-600 font-semibold">{champ.note}</p>}
+      <p className="text-gray-600 font-semibold text-base max-w-sm mx-auto">
         Beat a field of 64 through organized chaos.
         The year has been settled.
       </p>

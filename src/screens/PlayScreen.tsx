@@ -23,7 +23,7 @@ export default function PlayScreen() {
       <div className="flex items-start justify-between gap-3">
         <div>
           <h2 className="font-serif font-black text-2xl tracking-tight">{meta.label}</h2>
-          <p className="text-xs text-gray-400 font-semibold mt-0.5">
+          <p className="text-xs text-gray-600 font-semibold mt-0.5">
             {done}/{roundMatchups.length} matchups · {meta.voting ? 'group vote' : 'rotating pickers'}
           </p>
         </div>
@@ -36,7 +36,7 @@ export default function PlayScreen() {
           </button>
           <button
             onClick={() => { if (confirm('Start a new game? This clears the current bracket.')) reset() }}
-            className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-semibold hover:border-rose-300 transition-colors text-gray-500"
+            className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-semibold hover:border-rose-300 transition-colors text-gray-700"
           >
             New
           </button>
@@ -56,14 +56,14 @@ export default function PlayScreen() {
       {active ? (
         <MatchupControl matchup={active} />
       ) : (
-        <div className="text-center text-gray-400 py-12 font-semibold">
+        <div className="text-center text-gray-600 py-12 font-semibold">
           Round complete — advancing…
         </div>
       )}
 
       {/* Up next */}
       {active && roundMatchups.filter((m) => m.winner === null).length > 1 && (
-        <p className="text-xs text-gray-300 font-semibold">
+        <p className="text-xs text-gray-500 font-semibold">
           Up next:{' '}
           {roundMatchups
             .filter((m) => m.winner === null && m.id !== active.id)
