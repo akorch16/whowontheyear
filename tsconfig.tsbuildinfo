@@ -1,0 +1,1 @@
+{"root":["./src/App.tsx","./src/main.tsx","./src/types.ts","./src/components/Timer.tsx","./src/game/bracket.ts","./src/game/rounds.ts","./src/game/seed.ts","./src/screens/BracketScreen.tsx","./src/screens/ChampionScreen.tsx","./src/screens/MatchupControl.tsx","./src/screens/PlayScreen.tsx","./src/screens/SetupScreen.tsx","./src/store/gameStore.tsx"],"version":"5.9.3"}
