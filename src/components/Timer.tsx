@@ -28,23 +28,18 @@ export default function Timer({ seconds = 120 }: { seconds?: number }) {
 
   return (
     <div className="flex items-center gap-3">
-      <span
-        className={`tabular-nums font-black text-2xl ${done ? 'text-accent2' : ''}`}
-      >
+      <span className={`tabular-nums font-black text-2xl ${done ? 'text-rose-500' : 'text-gray-900'}`}>
         {mm}:{ss}
       </span>
       <button
         onClick={() => setRunning((v) => !v)}
-        className="rounded-md border border-edge px-3 py-1 text-sm hover:border-accent"
+        className="rounded-lg border border-gray-200 px-3 py-1 text-sm font-semibold hover:border-gold transition-colors"
       >
         {running ? 'Pause' : remaining === seconds ? 'Start' : 'Resume'}
       </button>
       <button
-        onClick={() => {
-          setRunning(false)
-          setRemaining(seconds)
-        }}
-        className="rounded-md border border-edge px-3 py-1 text-sm hover:border-accent"
+        onClick={() => { setRunning(false); setRemaining(seconds) }}
+        className="rounded-lg border border-gray-200 px-3 py-1 text-sm font-semibold hover:border-gray-400 transition-colors"
       >
         Reset
       </button>

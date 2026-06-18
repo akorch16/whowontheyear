@@ -7,10 +7,7 @@ import {
 } from '../game/seed'
 
 const linesOf = (s: string) =>
-  s
-    .split('\n')
-    .map((l) => l.trim())
-    .filter(Boolean)
+  s.split('\n').map((l) => l.trim()).filter(Boolean)
 
 export default function SetupScreen() {
   const { start } = useGame()
@@ -48,67 +45,43 @@ export default function SetupScreen() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
-      <p className="text-white/60 text-sm">
-        Set up this year's field. The bracket needs exactly{' '}
-        <b className="text-white">{FIELD_SIZE}</b> contenders — base entries plus
-        one winner from each play-in matchup.
-      </p>
+    <div className="max-w-2xl mx-auto px-5 py-8 space-y-7">
+      <div className="border-b border-gray-100 pb-6">
+        <h2 className="font-serif font-black text-3xl tracking-tight mb-1">
+          Set up your bracket
+        </h2>
+        <p className="text-gray-400 text-sm font-semibold">
+          You need exactly <span className="text-gray-700 font-bold">{FIELD_SIZE}</span> contenders —
+          base entries + one winner per play-in matchup.
+        </p>
+      </div>
 
-      <Section
-        title="Players"
-        hint="One name per line. Turn order follows this list in the pick rounds."
-      >
-        <textarea
-          className={taClass}
-          rows={5}
-          value={players}
-          onChange={(e) => setPlayers(e.target.value)}
-        />
+      <Section title="Players" hint="One name per line. Turn order follows this list.">
+        <textarea className={ta} rows={5} value={players} onChange={(e) => setPlayers(e.target.value)} />
         <Counter ok={playersOk} label={`${playerList.length} players`} need="min 2" />
       </Section>
 
-      <Section
-        title="Base entries"
-        hint="One per line. People, things, concepts — anything goes."
-      >
-        <textarea
-          className={taClass}
-          rows={12}
-          value={entries}
-          onChange={(e) => setEntries(e.target.value)}
-        />
+      <Section title="Contenders" hint="One per line. People, things, concepts — anything goes.">
+        <textarea className={ta} rows={12} value={entries} onChange={(e) => setEntries(e.target.value)} />
+        <Counter ok={baseList.length > 0} label={`${baseList.length} base entries`} need={`need ${FIELD_SIZE - playInPairs.length} to fill the field`} />
       </Section>
 
-      <Section
-        title="Play-in matchups (optional)"
-        hint={'One per line as "A vs B". The winner of each joins the field.'}
-      >
-        <textarea
-          className={taClass}
-          rows={4}
-          value={playIn}
-          onChange={(e) => setPlayIn(e.target.value)}
-        />
-        <Counter
-          ok={playInPairs.length > 0}
-          label={`${playInPairs.length} play-in matchups`}
-          need="optional"
-        />
+      <Section title="Play-in matchups" hint={'One per line as "A vs B". Winner of each joins the field.'}>
+        <textarea className={ta} rows={4} value={playIn} onChange={(e) => setPlayIn(e.target.value)} />
+        <Counter ok={playInPairs.length > 0} label={`${playInPairs.length} play-in matchups`} need="optional" />
       </Section>
 
-      <div className="flex items-center justify-between rounded-lg bg-panel border border-edge px-4 py-3">
-        <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
+      <div className="flex items-center justify-between rounded-xl border border-gray-100 bg-gray-50 px-4 py-3">
+        <label className="flex items-center gap-2 text-sm font-semibold cursor-pointer select-none text-gray-700">
           <input
             type="checkbox"
             checked={shuffleSeeds}
             onChange={(e) => setShuffleSeeds(e.target.checked)}
+            className="accent-gold"
           />
-          Shuffle the bracket seeding
+          Shuffle seeding
         </label>
-        <span
-          className={`text-sm font-semibold ${fieldOk ? 'text-emerald-400' : 'text-accent2'}`}
-        >
+        <span className={`text-sm font-black ${fieldOk ? 'text-emerald-500' : 'text-rose-400'}`}>
           Field: {fieldTotal}/{FIELD_SIZE}
         </span>
       </div>
@@ -116,10 +89,10 @@ export default function SetupScreen() {
       <button
         disabled={!canStart}
         onClick={begin}
-        className="w-full rounded-lg py-3 font-bold text-ink bg-accent disabled:bg-edge disabled:text-white/40 transition-colors"
+        className="btn-gradient w-full rounded-xl py-4 font-black text-base tracking-wide"
       >
         {canStart
-          ? 'Start the bracket'
+          ? 'Start the bracket →'
           : !playersOk
             ? 'Add at least 2 players'
             : `Need ${FIELD_SIZE} contenders (have ${fieldTotal})`}
@@ -128,23 +101,15 @@ export default function SetupScreen() {
   )
 }
 
-const taClass =
-  'w-full rounded-lg bg-panel border border-edge px-3 py-2 text-sm leading-6 outline-none focus:border-accent resize-y'
+const ta =
+  'w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm leading-6 outline-none focus:border-gold resize-y font-sans'
 
-function Section({
-  title,
-  hint,
-  children,
-}: {
-  title: string
-  hint: string
-  children: React.ReactNode
-}) {
+function Section({ title, hint, children }: { title: string; hint: string; children: React.ReactNode }) {
   return (
     <section className="space-y-2">
       <div>
-        <h2 className="font-bold">{title}</h2>
-        <p className="text-xs text-white/40">{hint}</p>
+        <h3 className="font-bold text-gray-900">{title}</h3>
+        <p className="text-xs text-gray-400">{hint}</p>
       </div>
       {children}
     </section>
@@ -154,8 +119,8 @@ function Section({
 function Counter({ ok, label, need }: { ok: boolean; label: string; need: string }) {
   return (
     <p className="text-xs">
-      <span className={ok ? 'text-emerald-400' : 'text-white/50'}>{label}</span>
-      <span className="text-white/30"> · {need}</span>
+      <span className={ok ? 'text-emerald-500 font-semibold' : 'text-gray-400'}>{label}</span>
+      <span className="text-gray-300"> · {need}</span>
     </p>
   )
 }

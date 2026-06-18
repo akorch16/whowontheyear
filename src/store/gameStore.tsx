@@ -28,6 +28,7 @@ export interface SetupConfig {
 }
 
 type Action =
+  | { type: 'GO_TO_SETUP' }
   | { type: 'START'; config: SetupConfig }
   | { type: 'PICK_WINNER'; matchupId: string; winner: EntryId }
   | { type: 'VOTE'; matchupId: string; side: 'a' | 'b' }
@@ -37,7 +38,7 @@ type Action =
 
 function emptyState(): GameState {
   return {
-    phase: 'setup',
+    phase: 'landing',
     entries: {},
     players: [],
     turnIndex: 0,
@@ -162,6 +163,8 @@ function applyWinner(state: GameState, matchupId: string, winner: EntryId): Game
 
 function reducer(state: GameState, action: Action): GameState {
   switch (action.type) {
+    case 'GO_TO_SETUP':
+      return { ...emptyState(), phase: 'setup' }
     case 'START':
       return startGame(action.config)
     case 'PICK_WINNER':
@@ -204,6 +207,7 @@ function load(): GameState {
 
 interface Store {
   state: GameState
+  goToSetup: () => void
   start: (config: SetupConfig) => void
   pickWinner: (matchupId: string, winner: EntryId) => void
   vote: (matchupId: string, side: 'a' | 'b') => void
@@ -226,6 +230,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   const store: Store = {
     state,
+    goToSetup: () => dispatch({ type: 'GO_TO_SETUP' }),
     start: (config) => dispatch({ type: 'START', config }),
     pickWinner: (matchupId, winner) =>
       dispatch({ type: 'PICK_WINNER', matchupId, winner }),

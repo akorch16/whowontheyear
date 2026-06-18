@@ -44,7 +44,7 @@ export interface Matchup {
   votesB: number
 }
 
-export type Phase = 'setup' | 'play' | 'champion'
+export type Phase = 'landing' | 'setup' | 'play' | 'champion'
 
 export interface GameState {
   phase: Phase
