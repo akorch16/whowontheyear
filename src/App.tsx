@@ -14,7 +14,7 @@ export default function App() {
           <span className="text-gold">Who Won</span> The Year
         </h1>
         {state.phase === 'play' && (
-          <span className="text-xs font-bold tracking-widest uppercase text-gray-400">
+          <span className="text-xs font-bold tracking-widest uppercase text-gray-600">
             {state.currentRound === 'play-in' ? 'Play-In'
               : state.currentRound === 'r64' ? 'Round of 64'
               : state.currentRound === 'r32' ? 'Round of 32'

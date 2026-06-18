@@ -22,7 +22,7 @@ export default function MatchupControl({ matchup }: { matchup: Matchup }) {
           ★ {meta.label}
         </span>
         {!meta.voting && picker && (
-          <span className="text-sm font-semibold text-gray-500">
+          <span className="text-sm font-semibold text-gray-700">
             Picking: <span className="font-black text-gray-900">{picker.name}</span>
           </span>
         )}
@@ -57,7 +57,7 @@ export default function MatchupControl({ matchup }: { matchup: Matchup }) {
       {meta.voting && (
         <div className="space-y-4">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-400 font-semibold">{totalVotes} vote{totalVotes !== 1 ? 's' : ''} cast</span>
+            <span className="text-gray-600 font-semibold">{totalVotes} vote{totalVotes !== 1 ? 's' : ''} cast</span>
             <button
               onClick={() => setVetoOpen((v) => !v)}
               className="font-bold text-rose-500 hover:underline"
@@ -68,7 +68,7 @@ export default function MatchupControl({ matchup }: { matchup: Matchup }) {
 
           {vetoOpen && (
             <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 space-y-3">
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-700">
                 2 min to argue · 2 min to counter · then vote. One veto per player, whole game.
               </p>
               <Timer seconds={120} />
@@ -80,7 +80,7 @@ export default function MatchupControl({ matchup }: { matchup: Matchup }) {
                     onClick={() => useVeto(p.id)}
                     className={`rounded-lg px-3 py-1 text-sm font-bold border transition-colors ${
                       p.vetoUsed
-                        ? 'border-gray-200 text-gray-300 line-through bg-white'
+                        ? 'border-gray-200 text-gray-500 line-through bg-white'
                         : 'border-rose-300 text-rose-600 hover:bg-rose-100 bg-white'
                     }`}
                   >
@@ -127,8 +127,8 @@ function EntryCard({
       className="text-left rounded-xl border-2 border-gray-100 bg-white px-5 py-5 hover:border-gold disabled:opacity-40 disabled:hover:border-gray-100 transition-colors group"
     >
       <div className="font-serif font-black text-xl leading-tight text-gray-900 group-hover:text-gray-800 mb-1">{label}</div>
-      {note && <div className="text-xs text-gray-400 mb-2">{note}</div>}
-      <div className="text-xs text-gray-300 font-semibold mt-2">
+      {note && <div className="text-xs text-gray-600 mb-2">{note}</div>}
+      <div className="text-xs text-gray-500 font-semibold mt-2">
         {mode === 'vote'
           ? `${votes ?? 0} vote${votes === 1 ? '' : 's'} · tap to +1`
           : 'tap to advance'}

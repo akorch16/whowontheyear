@@ -50,7 +50,7 @@ export default function SetupScreen() {
         <h2 className="font-serif font-black text-3xl tracking-tight mb-1">
           Set up your bracket
         </h2>
-        <p className="text-gray-400 text-sm font-semibold">
+        <p className="text-gray-600 text-sm font-semibold">
           You need exactly <span className="text-gray-700 font-bold">{FIELD_SIZE}</span> contenders —
           base entries + one winner per play-in matchup.
         </p>
@@ -109,7 +109,7 @@ function Section({ title, hint, children }: { title: string; hint: string; child
     <section className="space-y-2">
       <div>
         <h3 className="font-bold text-gray-900">{title}</h3>
-        <p className="text-xs text-gray-400">{hint}</p>
+        <p className="text-xs text-gray-600">{hint}</p>
       </div>
       {children}
     </section>
@@ -119,8 +119,8 @@ function Section({ title, hint, children }: { title: string; hint: string; child
 function Counter({ ok, label, need }: { ok: boolean; label: string; need: string }) {
   return (
     <p className="text-xs">
-      <span className={ok ? 'text-emerald-500 font-semibold' : 'text-gray-400'}>{label}</span>
-      <span className="text-gray-300"> · {need}</span>
+      <span className={ok ? 'text-emerald-500 font-semibold' : 'text-gray-600'}>{label}</span>
+      <span className="text-gray-500"> · {need}</span>
     </p>
   )
 }
