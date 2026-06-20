@@ -66,7 +66,7 @@ export default function MatchupControl({ matchup }: { matchup: Matchup }) {
             onClick={() => setVetoOpen((v) => !v)}
             className="font-bold text-rose-500 hover:underline"
           >
-            {vetoOpen ? 'Hide veto' : '⚔️ Veto / argue'}
+            {vetoOpen ? 'Hide veto' : '⚔️ Veto'}
           </button>
         </div>
 
