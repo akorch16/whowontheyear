@@ -2,14 +2,24 @@ import { useGame } from '../store/gameStore'
 import Confetti from '../components/Confetti'
 import { SEED_ENTRIES_BASE, SEED_PLAYIN_PAIRS } from '../game/seed'
 
-const PREVIEW_MATCHUPS: [string, string][] = [
-  [SEED_PLAYIN_PAIRS[0][0], SEED_PLAYIN_PAIRS[0][1]],   // OpenAI vs DeepSeek
-  [SEED_PLAYIN_PAIRS[2][0], SEED_PLAYIN_PAIRS[2][1]],   // Sean Combs vs Luigi Mangione
-  [SEED_ENTRIES_BASE[0],  SEED_ENTRIES_BASE[1]],         // Maduro's capture vs The Iran war
-  [SEED_ENTRIES_BASE[12], SEED_ENTRIES_BASE[13]],        // Claude Code vs Agentic AI
-  [SEED_ENTRIES_BASE[29], SEED_ENTRIES_BASE[30]],        // Bad Bunny vs Kendrick Lamar
-  [SEED_ENTRIES_BASE[38], SEED_ENTRIES_BASE[39]],        // GTA VI vs Lucia
+// Shuffle once per page load so the preview feels alive
+function seededShuffle<T>(arr: T[]): T[] {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+const ALL_ENTRIES = [
+  ...SEED_PLAYIN_PAIRS.map(([a, b]) => [a, b] as [string, string]),
+  ...Array.from({ length: Math.floor(SEED_ENTRIES_BASE.length / 2) }, (_, i) =>
+    [SEED_ENTRIES_BASE[i * 2], SEED_ENTRIES_BASE[i * 2 + 1]] as [string, string]
+  ),
 ]
+
+const PREVIEW_MATCHUPS: [string, string][] = seededShuffle(ALL_ENTRIES).slice(0, 8)
 
 export default function LandingScreen() {
   const { goToSetup } = useGame()
@@ -80,20 +90,20 @@ export default function LandingScreen() {
         </div>
 
         {/* Bracket preview */}
-        <div className="flex items-center gap-4 mb-6">
+        <div className="flex items-center gap-4 mb-5">
           <div className="flex-1 h-px bg-gray-100" />
-          <span className="text-xs font-bold tracking-widest uppercase text-gray-500">sample matchups</span>
+          <span className="text-xs font-bold tracking-widest uppercase text-gray-500">this year's field</span>
           <div className="flex-1 h-px bg-gray-100" />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
           {PREVIEW_MATCHUPS.map(([a, b], i) => (
-            <MatchupPreview key={i} a={a} b={b} />
+            <BracketCard key={i} seed={i + 1} a={a} b={b} />
           ))}
         </div>
 
         <p className="text-center text-xs text-gray-400 font-semibold tracking-wide">
-          + 58 more matchups in the full bracket
+          64 contenders total · randomized every time
         </p>
 
       </div>
@@ -101,12 +111,22 @@ export default function LandingScreen() {
   )
 }
 
-function MatchupPreview({ a, b }: { a: string; b: string }) {
+function BracketCard({ seed, a, b }: { seed: number; a: string; b: string }) {
   return (
-    <div className="flex items-center gap-2 rounded-xl border border-gray-100 bg-white px-3 py-2.5 shadow-sm">
-      <span className="flex-1 text-right text-sm font-bold text-gray-800 truncate">{a}</span>
-      <span className="shrink-0 text-[10px] font-black tracking-widest text-gray-400 bg-gray-100 rounded-md px-1.5 py-0.5">VS</span>
-      <span className="flex-1 text-left text-sm font-bold text-gray-800 truncate">{b}</span>
+    <div className="rounded-lg overflow-hidden border border-gray-200 shadow-sm text-left">
+      <div className="bg-gray-50 px-2 py-0.5 flex items-center gap-1 border-b border-gray-200">
+        <span className="text-[10px] font-black text-gray-400 tracking-widest uppercase">R64 · #{seed}</span>
+      </div>
+      <div className="bg-white">
+        <div className="flex items-center gap-1.5 px-2 py-1.5 border-b border-gray-100">
+          <span className="text-[11px] font-black text-gray-300 w-3 shrink-0">1</span>
+          <span className="text-xs font-bold text-gray-800 leading-tight line-clamp-1">{a}</span>
+        </div>
+        <div className="flex items-center gap-1.5 px-2 py-1.5">
+          <span className="text-[11px] font-black text-gray-300 w-3 shrink-0">2</span>
+          <span className="text-xs font-bold text-gray-800 leading-tight line-clamp-1">{b}</span>
+        </div>
+      </div>
     </div>
   )
 }
