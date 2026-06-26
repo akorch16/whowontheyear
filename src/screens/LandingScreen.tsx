@@ -29,8 +29,8 @@ export default function LandingScreen() {
         </h1>
 
         {/* Subline */}
-        <p className="text-center text-base text-gray-600 font-semibold mb-6 max-w-sm mx-auto leading-relaxed">
-          64 contenders. Head to head match ups. One champion.<br />No criteria. Just organized chaos.
+        <p className="text-center text-base text-gray-600 font-semibold mb-6 max-w-xl mx-auto leading-relaxed">
+          <span className="whitespace-nowrap">64 contenders. Head to head match ups. One champion.</span><br />No criteria. Just organized chaos.
         </p>
 
         {/* CTA button */}
