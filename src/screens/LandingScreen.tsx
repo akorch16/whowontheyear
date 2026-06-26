@@ -30,7 +30,7 @@ export default function LandingScreen() {
 
         {/* Subline */}
         <p className="text-center text-base text-gray-600 font-semibold mb-6 max-w-sm mx-auto leading-relaxed">
-          64 contenders. Organized chaos. One champion.<br />No criteria. Just vibes.
+          64 contenders. Head to head match ups. One champion.<br />No criteria. Just organized chaos.
         </p>
 
         {/* CTA button */}

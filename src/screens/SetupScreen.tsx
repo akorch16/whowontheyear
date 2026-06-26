@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useGame, FIELD_SIZE, type SetupConfig } from '../store/gameStore'
+import { shuffle } from '../game/bracket'
 import {
   SEED_PLAYERS,
   SEED_ENTRIES_BASE,
@@ -34,6 +35,12 @@ export default function SetupScreen() {
   const playersOk = playerList.length >= 2
   const canStart = fieldOk && playersOk
 
+  const randomize = () => {
+    setEntries(shuffle(baseList).join('\n'))
+    // The previewed order is now the bracket order — don't re-shuffle at start.
+    setShuffleSeeds(false)
+  }
+
   const begin = () => {
     const config: SetupConfig = {
       playerNames: playerList,
@@ -63,7 +70,20 @@ export default function SetupScreen() {
 
       <Section title="Contenders" hint="One per line. People, things, concepts — anything goes.">
         <textarea className={ta} rows={12} value={entries} onChange={(e) => setEntries(e.target.value)} />
-        <Counter ok={baseList.length > 0} label={`${baseList.length} base entries`} need={`need ${FIELD_SIZE - playInPairs.length} to fill the field`} />
+        <div className="flex items-center justify-between gap-3">
+          <Counter ok={baseList.length > 0} label={`${baseList.length} base entries`} need={`need ${FIELD_SIZE - playInPairs.length} to fill the field`} />
+          <button
+            type="button"
+            onClick={randomize}
+            disabled={baseList.length < 2}
+            className="shrink-0 rounded-lg border border-gold bg-white px-3 py-1.5 text-sm font-bold text-gold-dark hover:bg-gold/10 disabled:opacity-40 transition-colors"
+          >
+            🎲 Randomize matchups
+          </button>
+        </div>
+        <p className="text-xs text-gray-500">
+          Re-rolls the order so unrelated contenders face off in Round of 64. Hit it until you like the chaos.
+        </p>
       </Section>
 
       <Section title="Play-in matchups" hint={'One per line as "A vs B". Winner of each joins the field.'}>
@@ -79,7 +99,7 @@ export default function SetupScreen() {
             onChange={(e) => setShuffleSeeds(e.target.checked)}
             className="accent-gold"
           />
-          Shuffle seeding
+          Shuffle order at start (random matchups)
         </label>
         <span className={`text-sm font-black ${fieldOk ? 'text-emerald-500' : 'text-rose-400'}`}>
           Field: {fieldTotal}/{FIELD_SIZE}
