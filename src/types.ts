@@ -56,4 +56,6 @@ export interface GameState {
   currentRound: RoundKey
   matchups: Matchup[]
   champion: EntryId | null
+  /** id of the most recently completed matchup; used by veto to undo it. */
+  lastPickedMatchupId: string | null
 }

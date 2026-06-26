@@ -33,6 +33,7 @@ type Action =
   | { type: 'PICK_WINNER'; matchupId: string; winner: EntryId }
   | { type: 'VOTE'; matchupId: string; side: 'a' | 'b' }
   | { type: 'USE_VETO'; playerId: string }
+  | { type: 'UNDO_LAST_PICK' }
   | { type: 'RESET' }
   | { type: 'LOAD'; state: GameState }
 
@@ -46,6 +47,7 @@ function emptyState(): GameState {
     currentRound: 'r64',
     matchups: [],
     champion: null,
+    lastPickedMatchupId: null,
   }
 }
 
@@ -115,7 +117,7 @@ function applyWinner(state: GameState, matchupId: string, winner: EntryId): Game
   const matchups = state.matchups.map((m) =>
     m.id === matchupId ? { ...m, winner } : m,
   )
-  let next: GameState = { ...state, matchups }
+  let next: GameState = { ...state, matchups, lastPickedMatchupId: matchupId }
 
   const round = state.matchups.find((m) => m.id === matchupId)?.round
   if (!round) return next
@@ -186,6 +188,45 @@ function reducer(state: GameState, action: Action): GameState {
           p.id === action.playerId ? { ...p, vetoUsed: true } : p,
         ),
       }
+    case 'UNDO_LAST_PICK': {
+      const { lastPickedMatchupId } = state
+      if (!lastPickedMatchupId) return state
+      const M = state.matchups.find((m) => m.id === lastPickedMatchupId)
+      if (!M) return state
+
+      // Did M's pick complete its round? Yes if every other matchup in that round also has a winner.
+      const roundMatchups = state.matchups.filter((m) => m.round === M.round)
+      const completedRound = roundMatchups.every((m) => m.winner !== null)
+
+      let matchups = state.matchups.map((m) =>
+        m.id === M.id ? { ...m, winner: null, votesA: 0, votesB: 0 } : m,
+      )
+      let currentRound = state.currentRound
+      let phase = state.phase
+      let champion = state.champion
+
+      if (completedRound) {
+        // Remove the next round's matchups that were generated from this completed round.
+        const next = nextMainRound(M.round)
+        if (next) {
+          matchups = matchups.filter((m) => m.round !== next)
+          currentRound = M.round
+        } else {
+          // M was the final matchup — undo champion declaration.
+          phase = 'play'
+          champion = null
+          currentRound = M.round
+        }
+      }
+
+      // Rewind turn rotation for pick rounds.
+      const pickRound = M.round === 'play-in' || M.round === 'r64' || M.round === 'r32'
+      const turnIndex = pickRound
+        ? (state.turnIndex - 1 + state.players.length) % state.players.length
+        : state.turnIndex
+
+      return { ...state, matchups, currentRound, phase, champion, turnIndex, lastPickedMatchupId: null }
+    }
     case 'RESET':
       return emptyState()
     case 'LOAD':
@@ -212,6 +253,7 @@ interface Store {
   pickWinner: (matchupId: string, winner: EntryId) => void
   vote: (matchupId: string, side: 'a' | 'b') => void
   useVeto: (playerId: string) => void
+  undoLastPick: () => void
   reset: () => void
 }
 
@@ -236,6 +278,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       dispatch({ type: 'PICK_WINNER', matchupId, winner }),
     vote: (matchupId, side) => dispatch({ type: 'VOTE', matchupId, side }),
     useVeto: (playerId) => dispatch({ type: 'USE_VETO', playerId }),
+    undoLastPick: () => dispatch({ type: 'UNDO_LAST_PICK' }),
     reset: () => dispatch({ type: 'RESET' }),
   }
 
