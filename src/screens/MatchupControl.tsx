@@ -103,14 +103,14 @@ export default function MatchupControl({ matchup }: { matchup: Matchup }) {
               onClick={() => a && pickWinner(matchup.id, a.id)}
               className="btn-gradient rounded-xl py-3 font-black text-sm"
             >
-              {a?.label ?? 'bye'} wins ✓
+              <span className="truncate">{a?.label ?? 'bye'}</span><span className="shrink-0 ml-1">wins ✓</span>
             </button>
             <button
               disabled={!b}
               onClick={() => b && pickWinner(matchup.id, b.id)}
               className="btn-gradient rounded-xl py-3 font-black text-sm"
             >
-              {b?.label ?? 'bye'} wins ✓
+              <span className="truncate">{b?.label ?? 'bye'}</span><span className="shrink-0 ml-1">wins ✓</span>
             </button>
           </div>
         )}
@@ -138,7 +138,7 @@ function EntryCard({
       onClick={onClick}
       className="text-left rounded-xl border-2 border-gray-100 bg-white px-5 py-5 hover:border-gold disabled:opacity-40 disabled:hover:border-gray-100 transition-colors group"
     >
-      <div className="font-serif font-black text-xl leading-tight text-gray-900 group-hover:text-gray-800 mb-1">{label}</div>
+      <div className="font-serif font-black text-lg sm:text-xl leading-tight text-gray-900 group-hover:text-gray-800 mb-1 line-clamp-2">{label}</div>
       {note && <div className="text-xs text-gray-600 mb-2">{note}</div>}
       <div className="text-xs text-gray-500 font-semibold mt-2">
         {mode === 'vote'

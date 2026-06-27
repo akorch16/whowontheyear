@@ -22,7 +22,7 @@ export default function PlayScreen() {
       {/* Round header */}
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h2 className="font-serif font-black text-2xl tracking-tight">{meta.label}</h2>
+          <h2 className="font-serif font-black text-xl sm:text-2xl tracking-tight">{meta.label}</h2>
           <p className="text-xs text-gray-600 font-semibold mt-0.5">
             {done}/{roundMatchups.length} matchups · {meta.voting ? 'group vote' : 'rotating pickers'}
           </p>
@@ -63,7 +63,7 @@ export default function PlayScreen() {
 
       {/* Up next */}
       {active && roundMatchups.filter((m) => m.winner === null).length > 1 && (
-        <p className="text-xs text-gray-500 font-semibold">
+        <p className="text-xs text-gray-500 font-semibold line-clamp-2">
           Up next:{' '}
           {roundMatchups
             .filter((m) => m.winner === null && m.id !== active.id)

@@ -25,7 +25,7 @@ export default function LandingScreen() {
   const { goToSetup } = useGame()
 
   return (
-    <div className="relative min-h-[calc(100vh-57px)] flex flex-col items-center justify-center px-6 py-4 overflow-hidden bg-white">
+    <div className="relative min-h-[calc(100vh-57px)] flex flex-col items-center justify-center px-4 sm:px-6 py-4 overflow-hidden bg-white">
       <Confetti />
 
       <div className="relative z-10 w-full max-w-2xl mx-auto">
@@ -43,14 +43,14 @@ export default function LandingScreen() {
         {/* Main title */}
         <h1
           className="font-serif font-black text-center leading-[0.95] tracking-tight mb-4"
-          style={{ fontSize: 'clamp(48px, 10vw, 76px)' }}
+          style={{ fontSize: 'clamp(40px, 10vw, 76px)' }}
         >
           Who <span style={{ color: '#F5C518' }}>Won</span><br />The Year
         </h1>
 
         {/* Subline */}
-        <p className="text-center text-base text-gray-600 font-semibold mb-6 max-w-xl mx-auto leading-relaxed">
-          <span className="whitespace-nowrap">64 contenders. Head to head match ups. One champion.</span><br />No criteria. Just organized chaos.
+        <p className="text-center text-sm sm:text-base text-gray-600 font-semibold mb-6 max-w-xl mx-auto leading-relaxed">
+          64 contenders. Head to head match ups. One champion.<br />No criteria. Just organized chaos.
         </p>
 
         {/* CTA button */}
