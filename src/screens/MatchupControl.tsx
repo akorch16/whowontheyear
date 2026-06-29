@@ -8,7 +8,7 @@ import VetoSplash from '../components/VetoSplash'
 export default function MatchupControl({ matchup }: { matchup: Matchup }) {
   const { state, pickWinner, vote, useVeto, undoLastPick } = useGame()
   const [vetoOpen, setVetoOpen] = useState(false)
-  const [vetoSplash, setVetoSplash] = useState<{ playerId: string; playerName: string } | null>(null)
+  const [vetoSplash, setVetoSplash] = useState<{ playerId: string; playerName: string; winnerLabel: string } | null>(null)
   const meta = ROUND_META[matchup.round]
   const entry = (id: string | null) => (id ? state.entries[id] : null)
   const a = entry(matchup.a)
@@ -81,7 +81,12 @@ export default function MatchupControl({ matchup }: { matchup: Matchup }) {
                 <button
                   key={p.id}
                   disabled={p.vetoUsed}
-                  onClick={() => !p.vetoUsed && state.lastPickedMatchupId && setVetoSplash({ playerId: p.id, playerName: p.name })}
+                  onClick={() => {
+                    if (p.vetoUsed || !state.lastPickedMatchupId) return
+                    const lastM = state.matchups.find((m) => m.id === state.lastPickedMatchupId)
+                    const winnerLabel = lastM?.winner ? state.entries[lastM.winner]?.label ?? '?' : '?'
+                    setVetoSplash({ playerId: p.id, playerName: p.name, winnerLabel })
+                  }}
                   className={`rounded-lg px-3 py-1 text-sm font-bold border transition-colors ${
                     p.vetoUsed || !state.lastPickedMatchupId
                       ? 'border-gray-200 text-gray-500 line-through bg-white'
@@ -119,6 +124,7 @@ export default function MatchupControl({ matchup }: { matchup: Matchup }) {
       {vetoSplash && (
         <VetoSplash
           playerName={vetoSplash.playerName}
+          winnerLabel={vetoSplash.winnerLabel}
           onDone={() => { useVeto(vetoSplash.playerId); undoLastPick(); setVetoSplash(null) }}
         />
       )}
