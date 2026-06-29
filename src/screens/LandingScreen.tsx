@@ -46,7 +46,7 @@ export default function LandingScreen() {
 
         {/* Subline */}
         <p className="text-center text-sm sm:text-base text-gray-600 font-semibold mb-6 max-w-xl mx-auto leading-relaxed">
-          64 contenders. Head to head match ups. One champion.<br />No criteria. Just organized chaos.
+          64 contenders. One champion.<br />No criteria. Just organized chaos.
         </p>
 
         {/* Animated VS preview */}
