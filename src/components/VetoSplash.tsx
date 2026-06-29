@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 
 interface Props {
   playerName: string
+  winnerLabel: string
   onDone: () => void
 }
 
@@ -9,7 +10,7 @@ interface Props {
 // /whowontheyear/ base path automatically).
 const TRUMP_IMG = `${import.meta.env.BASE_URL}trump-veto.jpg`
 
-export default function VetoSplash({ playerName, onDone }: Props) {
+export default function VetoSplash({ playerName, winnerLabel, onDone }: Props) {
   // Auto-dismiss after 2.6s
   useEffect(() => {
     const t = setTimeout(onDone, 2600)
@@ -22,6 +23,11 @@ export default function VetoSplash({ playerName, onDone }: Props) {
       onClick={onDone}
     >
       <div className="relative max-w-2xl w-full mx-4 select-none">
+
+        {/* Header */}
+        <p className="text-center text-white font-black text-lg sm:text-2xl tracking-wide drop-shadow-lg mb-3 uppercase">
+          {playerName} vetoed {winnerLabel}
+        </p>
 
         {/* Trump photo (dark fallback box if the image is missing) */}
         <div
