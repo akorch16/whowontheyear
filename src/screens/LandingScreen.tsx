@@ -1,9 +1,9 @@
+import { useState, useEffect } from 'react'
 import { useGame } from '../store/gameStore'
 import Confetti from '../components/Confetti'
 import { SEED_ENTRIES_BASE, SEED_PLAYIN_PAIRS } from '../game/seed'
 
-// Shuffle once per page load so the preview feels alive
-function seededShuffle<T>(arr: T[]): T[] {
+function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -12,14 +12,17 @@ function seededShuffle<T>(arr: T[]): T[] {
   return a
 }
 
-const ALL_ENTRIES = [
-  ...SEED_PLAYIN_PAIRS.map(([a, b]) => [a, b] as [string, string]),
-  ...Array.from({ length: Math.floor(SEED_ENTRIES_BASE.length / 2) }, (_, i) =>
-    [SEED_ENTRIES_BASE[i * 2], SEED_ENTRIES_BASE[i * 2 + 1]] as [string, string]
-  ),
-]
+// Flatten all entries into one pool, then pair them up for rotation
+const ALL_LABELS: string[] = shuffle([
+  ...SEED_PLAYIN_PAIRS.flat(),
+  ...SEED_ENTRIES_BASE,
+])
 
-const PREVIEW_MATCHUPS: [string, string][] = seededShuffle(ALL_ENTRIES).slice(0, 8)
+// Build rotating matchup pairs from the shuffled pool
+const ROTATING_MATCHUPS: [string, string][] = Array.from(
+  { length: Math.floor(ALL_LABELS.length / 2) },
+  (_, i) => [ALL_LABELS[i * 2], ALL_LABELS[i * 2 + 1]]
+)
 
 export default function LandingScreen() {
   const { goToSetup } = useGame()
@@ -89,21 +92,17 @@ export default function LandingScreen() {
           />
         </div>
 
-        {/* Bracket preview */}
+        {/* Animated VS preview */}
         <div className="flex items-center gap-4 mb-5">
           <div className="flex-1 h-px bg-gray-100" />
           <span className="text-xs font-bold tracking-widest uppercase text-gray-500">this year's field</span>
           <div className="flex-1 h-px bg-gray-100" />
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
-          {PREVIEW_MATCHUPS.map(([a, b], i) => (
-            <BracketCard key={i} seed={i + 1} a={a} b={b} />
-          ))}
-        </div>
+        <RotatingMatchup matchups={ROTATING_MATCHUPS} />
 
-        <p className="text-center text-xs text-gray-400 font-semibold tracking-wide">
-          64 contenders total · randomized every time
+        <p className="text-center text-xs text-gray-400 font-semibold tracking-wide mt-3">
+          64 contenders · no criteria · just chaos
         </p>
 
       </div>
@@ -111,21 +110,50 @@ export default function LandingScreen() {
   )
 }
 
-function BracketCard({ seed, a, b }: { seed: number; a: string; b: string }) {
+function RotatingMatchup({ matchups }: { matchups: [string, string][] }) {
+  const [idx, setIdx] = useState(0)
+  const [visA, setVisA] = useState(true)
+  const [visB, setVisB] = useState(true)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Stagger: side A flips first, side B half a beat later
+      setVisA(false)
+      setTimeout(() => {
+        setIdx((i) => (i + 1) % matchups.length)
+        setVisA(true)
+      }, 300)
+      setTimeout(() => setVisB(false), 150)
+      setTimeout(() => setVisB(true), 450)
+    }, 2200)
+    return () => clearInterval(interval)
+  }, [matchups.length])
+
+  const [a, b] = matchups[idx]
+
   return (
-    <div className="rounded-lg overflow-hidden border border-gray-200 shadow-sm text-left">
-      <div className="bg-gray-50 px-2 py-0.5 flex items-center gap-1 border-b border-gray-200">
-        <span className="text-[10px] font-black text-gray-400 tracking-widest uppercase">R64 · #{seed}</span>
+    <div className="flex items-stretch gap-3 sm:gap-4">
+      {/* Side A */}
+      <div
+        className="flex-1 rounded-2xl border-2 border-gray-100 bg-white px-4 py-5 flex items-center justify-center min-h-[80px] shadow-sm transition-all duration-300"
+        style={{ opacity: visA ? 1 : 0, transform: visA ? 'translateY(0)' : 'translateY(-6px)' }}
+      >
+        <span className="font-serif font-black text-base sm:text-lg text-gray-900 text-center leading-tight line-clamp-2">{a}</span>
       </div>
-      <div className="bg-white">
-        <div className="flex items-center gap-1.5 px-2 py-1.5 border-b border-gray-100">
-          <span className="text-[11px] font-black text-gray-300 w-3 shrink-0">1</span>
-          <span className="text-xs font-bold text-gray-800 leading-tight line-clamp-1">{a}</span>
+
+      {/* VS badge */}
+      <div className="flex items-center justify-center shrink-0">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-gold bg-white flex items-center justify-center font-black text-xs sm:text-sm text-gray-800 shadow-sm">
+          VS
         </div>
-        <div className="flex items-center gap-1.5 px-2 py-1.5">
-          <span className="text-[11px] font-black text-gray-300 w-3 shrink-0">2</span>
-          <span className="text-xs font-bold text-gray-800 leading-tight line-clamp-1">{b}</span>
-        </div>
+      </div>
+
+      {/* Side B */}
+      <div
+        className="flex-1 rounded-2xl border-2 border-gray-100 bg-white px-4 py-5 flex items-center justify-center min-h-[80px] shadow-sm transition-all duration-300"
+        style={{ opacity: visB ? 1 : 0, transform: visB ? 'translateY(0)' : 'translateY(6px)' }}
+      >
+        <span className="font-serif font-black text-base sm:text-lg text-gray-900 text-center leading-tight line-clamp-2">{b}</span>
       </div>
     </div>
   )
