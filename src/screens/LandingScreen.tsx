@@ -1,34 +1,26 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useGame } from '../store/gameStore'
 import Confetti from '../components/Confetti'
 import { SEED_ENTRIES_BASE, SEED_PLAYIN_PAIRS } from '../game/seed'
 
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr]
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]]
-  }
-  return a
-}
-
-// Flatten all entries into one pool, then pair them up for rotation
-const ALL_LABELS: string[] = shuffle([
+const ALL_LABELS: string[] = [
   ...SEED_PLAYIN_PAIRS.flat(),
   ...SEED_ENTRIES_BASE,
-])
+]
 
-// Build rotating matchup pairs from the shuffled pool
-const ROTATING_MATCHUPS: [string, string][] = Array.from(
-  { length: Math.floor(ALL_LABELS.length / 2) },
-  (_, i) => [ALL_LABELS[i * 2], ALL_LABELS[i * 2 + 1]]
-)
+function randomPick(exclude?: string): string {
+  let pick: string
+  do {
+    pick = ALL_LABELS[Math.floor(Math.random() * ALL_LABELS.length)]
+  } while (pick === exclude)
+  return pick
+}
 
 export default function LandingScreen() {
   const { goToSetup } = useGame()
 
   return (
-    <div className="relative min-h-[calc(100vh-57px)] flex flex-col items-center justify-center px-4 sm:px-6 py-4 overflow-hidden bg-white">
+    <div className="relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 py-4 overflow-hidden bg-white">
       <Confetti />
 
       <div className="relative z-10 w-full max-w-2xl mx-auto">
@@ -48,12 +40,19 @@ export default function LandingScreen() {
           className="font-serif font-black text-center leading-[0.95] tracking-tight mb-4"
           style={{ fontSize: 'clamp(40px, 10vw, 76px)' }}
         >
-          Who <span style={{ color: '#F5C518' }}>Won</span><br />The Year
+          Who <span style={{ color: '#F5C518' }}>Won</span>{' '}
+          <br className="sm:hidden" />The Year
         </h1>
 
         {/* Subline */}
         <p className="text-center text-sm sm:text-base text-gray-600 font-semibold mb-6 max-w-xl mx-auto leading-relaxed">
-          64 contenders. Head to head match ups. One champion.<br />No criteria. Just organized chaos.
+          64 contenders. One champion.<br />No criteria. Just organized chaos.
+        </p>
+
+        {/* Animated VS preview */}
+        <RotatingMatchup />
+        <p className="text-center text-xs text-gray-400 font-semibold tracking-wide mt-2 mb-8">
+          64 contenders · no criteria · just chaos
         </p>
 
         {/* CTA button */}
@@ -92,44 +91,34 @@ export default function LandingScreen() {
           />
         </div>
 
-        {/* Animated VS preview */}
-        <div className="flex items-center gap-4 mb-5">
-          <div className="flex-1 h-px bg-gray-100" />
-          <span className="text-xs font-bold tracking-widest uppercase text-gray-500">this year's field</span>
-          <div className="flex-1 h-px bg-gray-100" />
-        </div>
-
-        <RotatingMatchup matchups={ROTATING_MATCHUPS} />
-
-        <p className="text-center text-xs text-gray-400 font-semibold tracking-wide mt-3">
-          64 contenders · no criteria · just chaos
-        </p>
-
       </div>
     </div>
   )
 }
 
-function RotatingMatchup({ matchups }: { matchups: [string, string][] }) {
-  const [idx, setIdx] = useState(0)
+function RotatingMatchup() {
+  const [a, setA] = useState(() => randomPick())
+  const [b, setB] = useState(() => randomPick(a))
   const [visA, setVisA] = useState(true)
   const [visB, setVisB] = useState(true)
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // Stagger: side A flips first, side B half a beat later
-      setVisA(false)
-      setTimeout(() => {
-        setIdx((i) => (i + 1) % matchups.length)
-        setVisA(true)
-      }, 300)
-      setTimeout(() => setVisB(false), 150)
-      setTimeout(() => setVisB(true), 450)
-    }, 2200)
-    return () => clearInterval(interval)
-  }, [matchups.length])
+  const cycle = useCallback(() => {
+    setVisA(false)
+    setTimeout(() => {
+      setA((prev) => randomPick(prev))
+      setVisA(true)
+    }, 300)
+    setTimeout(() => setVisB(false), 150)
+    setTimeout(() => {
+      setB((prev) => randomPick(prev))
+      setVisB(true)
+    }, 450)
+  }, [])
 
-  const [a, b] = matchups[idx]
+  useEffect(() => {
+    const interval = setInterval(cycle, 2200)
+    return () => clearInterval(interval)
+  }, [cycle])
 
   return (
     <div className="flex items-stretch gap-3 sm:gap-4">
