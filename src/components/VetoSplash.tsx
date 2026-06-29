@@ -11,9 +11,9 @@ interface Props {
 const TRUMP_IMG = `${import.meta.env.BASE_URL}trump-veto.jpg`
 
 export default function VetoSplash({ playerName, winnerLabel, onDone }: Props) {
-  // Auto-dismiss after 2.6s
+  // Auto-dismiss after 7.6s
   useEffect(() => {
-    const t = setTimeout(onDone, 2600)
+    const t = setTimeout(onDone, 7600)
     return () => clearTimeout(t)
   }, [onDone])
 
