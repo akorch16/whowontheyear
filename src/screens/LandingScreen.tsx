@@ -116,7 +116,7 @@ function RotatingMatchup() {
   }, [])
 
   useEffect(() => {
-    const interval = setInterval(cycle, 2200)
+    const interval = setInterval(cycle, 3200)
     return () => clearInterval(interval)
   }, [cycle])
 
