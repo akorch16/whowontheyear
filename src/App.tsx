@@ -15,13 +15,24 @@ export default function App() {
         </h1>
         {state.phase === 'play' && (
           <span className="text-xs font-bold tracking-widest uppercase text-gray-600">
-            {state.currentRound === 'play-in' ? 'Play-In'
-              : state.currentRound === 'r64' ? 'Round of 64'
-              : state.currentRound === 'r32' ? 'Round of 32'
-              : state.currentRound === 'sweet16' ? 'Sweet 16'
-              : state.currentRound === 'elite8' ? 'Elite 8'
-              : state.currentRound === 'final4' ? 'Final 4'
-              : 'Championship'}
+            <span className="hidden sm:inline">
+              {state.currentRound === 'play-in' ? 'Play-In'
+                : state.currentRound === 'r64' ? 'Round of 64'
+                : state.currentRound === 'r32' ? 'Round of 32'
+                : state.currentRound === 'sweet16' ? 'Sweet 16'
+                : state.currentRound === 'elite8' ? 'Elite 8'
+                : state.currentRound === 'final4' ? 'Final 4'
+                : 'Championship'}
+            </span>
+            <span className="sm:hidden">
+              {state.currentRound === 'play-in' ? 'Play-In'
+                : state.currentRound === 'r64' ? 'R64'
+                : state.currentRound === 'r32' ? 'R32'
+                : state.currentRound === 'sweet16' ? 'S16'
+                : state.currentRound === 'elite8' ? 'E8'
+                : state.currentRound === 'final4' ? 'F4'
+                : 'Champ'}
+            </span>
           </span>
         )}
       </header>

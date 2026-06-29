@@ -132,7 +132,8 @@ export default function BracketScreen() {
   const label = (id: string | null) => (id ? entries[id]?.label ?? '?' : 'TBD')
 
   return (
-    <div className="overflow-x-auto -mx-5 px-5 pb-4">
+    <>
+    <div className="overflow-x-auto -mx-5 px-5 pb-4" style={{ WebkitOverflowScrolling: "touch" }}>
       <div style={{ width: TOTAL_W, position: 'relative', userSelect: 'none' }}>
 
         {/* Round headers */}
@@ -203,5 +204,7 @@ export default function BracketScreen() {
         </div>
       </div>
     </div>
+    <p className="sm:hidden text-center text-xs text-gray-400 font-semibold mt-2">← swipe to see full bracket →</p>
+    </>
   )
 }

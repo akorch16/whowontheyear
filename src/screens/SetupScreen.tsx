@@ -78,7 +78,7 @@ export default function SetupScreen() {
             disabled={baseList.length < 2}
             className="shrink-0 rounded-lg border border-gold bg-white px-3 py-1.5 text-sm font-bold text-gold-dark hover:bg-gold/10 disabled:opacity-40 transition-colors"
           >
-            🎲 Randomize matchups
+            <span className="sm:hidden">🎲 Randomize</span><span className="hidden sm:inline">🎲 Randomize matchups</span>
           </button>
         </div>
         <p className="text-xs text-gray-500">
