@@ -21,7 +21,7 @@ export const SEED_ENTRIES_BASE = [
   'Chappell Roan', 'The Chappell Roan Security Saga', 'Billie Eilish', 'Benson Boone',
 
   // film & TV
-  'GTA VI', 'Lucia', 'K-Pop Demon Hunters', 'One Battle After Another', 'Sinners',
+  'GTA VI', 'Super Mario Galaxy', 'K-Pop Demon Hunters', 'One Battle After Another', 'Sinners',
   'Michael B. Jordan', 'Stranger Things', 'Devil Wears Prada 2', 'The White Lotus', 'Squid Game Season 3',
 
   // culture, society & misc
