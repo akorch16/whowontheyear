@@ -58,4 +58,6 @@ export interface GameState {
   champion: EntryId | null
   /** id of the most recently completed matchup; used by veto to undo it. */
   lastPickedMatchupId: string | null
+  /** set when a round just finished; cleared after the interstitial is shown. */
+  completedRound: RoundKey | null
 }

@@ -3,9 +3,10 @@ import { useGame } from '../store/gameStore'
 import { ROUND_META } from '../game/rounds'
 import MatchupControl from './MatchupControl'
 import BracketScreen from './BracketScreen'
+import RoundCompleteSplash from '../components/RoundCompleteSplash'
 
 export default function PlayScreen() {
-  const { state, reset } = useGame()
+  const { state, reset, clearCompletedRound } = useGame()
   const [showBracket, setShowBracket] = useState(false)
 
   const roundMatchups = state.matchups
@@ -75,6 +76,13 @@ export default function PlayScreen() {
             })
             .join('  ·  ')}
         </p>
+      )}
+
+      {state.completedRound && (
+        <RoundCompleteSplash
+          round={state.completedRound}
+          onDone={clearCompletedRound}
+        />
       )}
     </div>
   )
