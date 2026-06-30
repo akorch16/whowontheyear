@@ -34,6 +34,7 @@ type Action =
   | { type: 'VOTE'; matchupId: string; side: 'a' | 'b' }
   | { type: 'USE_VETO'; playerId: string }
   | { type: 'UNDO_LAST_PICK' }
+  | { type: 'CLEAR_COMPLETED_ROUND' }
   | { type: 'RESET' }
   | { type: 'LOAD'; state: GameState }
 
@@ -48,6 +49,7 @@ function emptyState(): GameState {
     matchups: [],
     champion: null,
     lastPickedMatchupId: null,
+    completedRound: null,
   }
 }
 
@@ -130,6 +132,8 @@ function applyWinner(state: GameState, matchupId: string, winner: EntryId): Game
   if (!roundComplete(matchups, round)) return next
 
   // Round finished — generate the next round.
+  next = { ...next, completedRound: round }
+
   if (round === 'play-in') {
     // Play-in winners join the base field (the entries not used in play-in).
     const playInIds = new Set(
@@ -225,8 +229,10 @@ function reducer(state: GameState, action: Action): GameState {
         ? (state.turnIndex - 1 + state.players.length) % state.players.length
         : state.turnIndex
 
-      return { ...state, matchups, currentRound, phase, champion, turnIndex, lastPickedMatchupId: null }
+      return { ...state, matchups, currentRound, phase, champion, turnIndex, lastPickedMatchupId: null, completedRound: null }
     }
+    case 'CLEAR_COMPLETED_ROUND':
+      return { ...state, completedRound: null }
     case 'RESET':
       return emptyState()
     case 'LOAD':
@@ -254,6 +260,7 @@ interface Store {
   vote: (matchupId: string, side: 'a' | 'b') => void
   useVeto: (playerId: string) => void
   undoLastPick: () => void
+  clearCompletedRound: () => void
   reset: () => void
 }
 
@@ -279,6 +286,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     vote: (matchupId, side) => dispatch({ type: 'VOTE', matchupId, side }),
     useVeto: (playerId) => dispatch({ type: 'USE_VETO', playerId }),
     undoLastPick: () => dispatch({ type: 'UNDO_LAST_PICK' }),
+    clearCompletedRound: () => dispatch({ type: 'CLEAR_COMPLETED_ROUND' }),
     reset: () => dispatch({ type: 'RESET' }),
   }
 
